@@ -2,6 +2,7 @@
 
 ## Table of Contents
 * [Installing ClickHouse Operator](#installing-clickhouse-operator)
+* [Building ClickHouse Operator from Sources](#building-from-sources)
 * [Simple deployment with default storage](#simple-deployment-with-default-storage)
 * [Custom deployment with Pod and VolumeClaim templates](#custom-deployment-with-pod-and-volumeclaim-templates)
 * [Custom deployment using specific ClickHouse configuration](#custom-deployment-using-specific-clickhouse-configuration)
@@ -21,6 +22,10 @@ $ kubectl get pods -n kube-system
 NAME                                        READY   STATUS    RESTARTS   AGE
 clickhouse-operator-ddc6fd499-fhxqs         1/1     Running   0          5m22s
 ```
+
+## Building ClickHouse Operator from Sources
+
+Complete instructions on how to build ClickHouse operator from sources as well as how to build a docker image and use it inside `kubernetes` described [here][build_from_sources].
 
 ## Simple deployment with default storage
 
@@ -187,3 +192,6 @@ spec:
 $ kubectl apply -n test -f https://raw.githubusercontent.com/Altinity/clickhouse-operator/master/docs/examples/chi-example-04-no-pv-custom-configuration.yaml
 clickhouseinstallation.clickhouse.altinity.com/test4 created
 ```
+
+
+[build_from_sources]: ./operator_build_from_sources.md
