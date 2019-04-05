@@ -2,7 +2,7 @@
 
 ## Table of Contents
 * [Installing ClickHouse Operator](#installing-clickhouse-operator)
-* [Building ClickHouse Operator from Sources](#building-from-sources)
+* [Building ClickHouse Operator from Sources](#building-clickhouse-operator-from-sources)
 * [Simple deployment with default storage](#simple-deployment-with-default-storage)
 * [Custom deployment with Pod and VolumeClaim templates](#custom-deployment-with-pod-and-volumeclaim-templates)
 * [Custom deployment using specific ClickHouse configuration](#custom-deployment-using-specific-clickhouse-configuration)
