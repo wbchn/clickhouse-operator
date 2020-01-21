@@ -1,5 +1,6 @@
 #!/bin/bash
 
+BRANCH="${BRANCH:-master}"
 GRAFANA_NAMESPACE="${GRAFANA_NAMESPACE:-grafana}"
 
 GRAFANA_NAME="${GRAFANA_NAME:-grafana}"
@@ -20,31 +21,29 @@ GRAFANA_DASHBOARD_NAME="${GRAFANA_DASHBOARD_NAME:-chdashboard}"
 ########################################
 
 
-kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f <( \
-    cat grafana-cr-template.yaml | \
-    GRAFANA_NAME="$GRAFANA_NAME" \
-    GRAFANA_ADMIN_USER="$GRAFANA_ADMIN_USER" \
-    GRAFANA_ADMIN_PASSWORD="$GRAFANA_ADMIN_PASSWORD" \
-    GRAFANA_DISABLE_LOGIN_FORM="$GRAFANA_DISABLE_LOGIN_FORM" \
-    GRAFANA_DISABLE_SIGNOUT_MENU="$GRAFANA_DISABLE_SIGNOUT_MENU" \
-    envsubst \
-)
+wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-cr-template.yaml | \
+GRAFANA_NAME="$GRAFANA_NAME" \
+GRAFANA_ADMIN_USER="$GRAFANA_ADMIN_USER" \
+GRAFANA_ADMIN_PASSWORD="$GRAFANA_ADMIN_PASSWORD" \
+GRAFANA_DISABLE_LOGIN_FORM="$GRAFANA_DISABLE_LOGIN_FORM" \
+GRAFANA_DISABLE_SIGNOUT_MENU="$GRAFANA_DISABLE_SIGNOUT_MENU" \
+envsubst | \
+kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -
 
 echo "Waiting to start"
 sleep 60
 
-kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f <( \
-    cat grafana-data-source-cr-template.yaml | \
-    GRAFANA_DATA_SOURCE_NAME="$GRAFANA_DATA_SOURCE_NAME" \
-    PROMETHEUS_URL="$PROMETHEUS_URL" \
-    envsubst \
-)
+wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-data-source-cr-template.yaml | \
+GRAFANA_DATA_SOURCE_NAME="$GRAFANA_DATA_SOURCE_NAME" \
+PROMETHEUS_URL="$PROMETHEUS_URL" \
+envsubst | \
+kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -
 
-#echo "Waiting to start"
-#sleep 60
-#
-#kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f <( \
-#    cat grafana-dashboard-cr-template.yaml | \
-#    GRAFANA_DASHBOARD_NAME="$GRAFANA_DASHBOARD_NAME" \
-#    envsubst \
-#)
+echo "Waiting to start"
+sleep 60
+
+wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-dashboard-cr-template.yaml | \
+BRANCH="$BRANCH" \
+GRAFANA_DASHBOARD_NAME="$GRAFANA_DASHBOARD_NAME" \
+envsubst | \
+kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -

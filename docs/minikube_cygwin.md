@@ -114,7 +114,15 @@ expected output
 export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-prometheus}
 curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/prometheus/create-prometheus.sh | bash
 
-kubectl --namespace=prometheus port-forward service/prometheus 9090
+kubectl --namespace=${PROMETHEUS_NAMESPACE} port-forward service/prometheus 9090
+# open http://localhost:9090/targets and check clickhouse-monitor is exists
+
+export GRAFANA_NAMESPACE=${GRAFANA_NAMESPACE:-grafana}
+curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/install-grafana-operator.sh | bash
+curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/install-grafana-with-operator.sh | bash
+
+kubectl --namespace="${GRAFANA_NAMESPACE}" port-forward service/grafana-service 3000
+# open http://localhost:3000/ and check prometheus datasource exists and grafana dashboard exists
 ```
 ## Clear all installed objects
 ```bash
