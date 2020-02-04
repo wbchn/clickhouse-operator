@@ -7,9 +7,9 @@ Windows 10 - 4Gb free RAM, 20Gb free Disk space
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
 
-## Install virtualbox, minikube, kubectl
+## Install virtualbox, minikube, kubectl, git
 ```bash
-choco install -y virtualbox minikube cygwin kubernetes-cli curl
+choco install -y virtualbox minikube cygwin kubernetes-cli curl git
 ```
 
 ## Open `bash console (as administrator)` press `WIN+R` type `bash` and press `CTRL+SHIFT+ENTER`
@@ -41,18 +41,21 @@ export ZK_NAMESPACE=${ZK_NAMESPACE:-zoo1ns}
 
 ### Install clickhouse operator
 ```bash
-curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/operator-installer/clickhouse-operator-install.sh | bash 
+git clone https://github.com/Altinity/clickhouse-operator.git ./clickhouse-operator
+cd ./clickhouse-operator
+git checkout ${BRANCH}
+bach -x ./deploy/operator-installer/clickhouse-operator-install.sh
 ```
 
 ### Create Zookeeper installation
 ```bash
 kubectl create namespace ${ZK_NAMESPACE}
-curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/zookeeper/quick-start-volume-emptyDir/zookeeper-1-node.yaml | kubectl apply --namespace=${ZK_NAMESPACE} -f -
+kubectl apply --namespace=${ZK_NAMESPACE} -f ./deploy/zookeeper/quick-start-volume-emptyDir/zookeeper-1-node.yaml
 ```
 
 ### Create ClickHouse installation 2 shards + 2 replicas in each shard with Persistent Volumes
 ```bash
-kubectl apply --namespace=${OPERATOR_NAMESPACE} -f https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/docs/chi-examples/04-replication-zookeeper-05-simple-PV.yaml 
+kubectl apply --namespace=${OPERATOR_NAMESPACE} -f ./docs/chi-examples/04-replication-zookeeper-05-simple-PV.yaml 
 ```
 
 ## Wait around 30 seconds and check all installed objects
@@ -88,7 +91,7 @@ clickhouse    chi-repl-05-replicated-1-1-0           1/1     Running   0        
 ```bash
 cmd /c start "minikube tunnel" minikube tunnel $(kubectl get services --namespace=${OPERATOR_NAMESPACE} | grep LoadBalancer | cut -d " " -f 1)
 ```
-expected output in separate input
+expected output in separate window
 ```bash
 Status:
         machine: minikube
@@ -102,7 +105,7 @@ Status:
                 loadbalancer emulator: no errors
 ```
 
-###  and run following command
+###  Run following command for check clickhouse connection worked
 ```bash
 curl "http://$(kubectl get svc --namespace=${OPERATOR_NAMESPACE} | grep LoadBalancer | awk '{print $4}'):8123/?query=SELECT+version()"
 ```
@@ -114,18 +117,19 @@ expected output
 ## Install Prometheus & Grafana for Monitoring
 ```bash
 export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-prometheus}
-curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/prometheus/create-prometheus.sh | bash
+bash -x ./deploy/prometheus/create-prometheus.sh | 
 
 kubectl --namespace=${PROMETHEUS_NAMESPACE} port-forward service/prometheus 9090
 # open http://localhost:9090/targets and check clickhouse-monitor is exists
 
 export GRAFANA_NAMESPACE=${GRAFANA_NAMESPACE:-grafana}
-curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/install-grafana-operator.sh | bash
-curl -sL https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/install-grafana-with-operator.sh | bash
+bash -x ./deploy/grafana/install-grafana-operator.sh
+bash -x ./deploy/grafana/install-grafana-with-operator.sh
 
 kubectl --namespace="${GRAFANA_NAMESPACE}" port-forward service/grafana-service 3000
 # open http://localhost:3000/ and check prometheus datasource exists and grafana dashboard exists
 ```
+
 ## Clear all installed objects
 ```bash
 minikube delete
