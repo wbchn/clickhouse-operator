@@ -44,7 +44,7 @@ export ZK_NAMESPACE=${ZK_NAMESPACE:-zoo1ns}
 git clone https://github.com/Altinity/clickhouse-operator.git ./clickhouse-operator
 cd ./clickhouse-operator
 git checkout ${BRANCH}
-bach -x ./deploy/operator-installer/clickhouse-operator-install.sh
+bash -x ./deploy/operator-installer/clickhouse-operator-install.sh
 ```
 
 ### Create Zookeeper installation
@@ -87,7 +87,7 @@ clickhouse    chi-repl-05-replicated-1-1-0           1/1     Running   0        
 ```
 
 ## Connect to ClickHouse database
-### Start minikube tunnel for assign external-ip for LoadBalancer services
+### Start minikube tunnel for assign external-ip for LoadBalancer services, open WIN+R, copy-paste command and press CTRL+SHIFT+ENTER for run as Administrator 
 ```bash
 cmd /c start "minikube tunnel" minikube tunnel $(kubectl get services --namespace=${OPERATOR_NAMESPACE} | grep LoadBalancer | cut -d " " -f 1)
 ```
@@ -117,7 +117,7 @@ expected output
 ## Install Prometheus & Grafana for Monitoring
 ```bash
 export PROMETHEUS_NAMESPACE=${PROMETHEUS_NAMESPACE:-prometheus}
-bash -x ./deploy/prometheus/create-prometheus.sh | 
+bash -x ./deploy/prometheus/create-prometheus.sh
 
 kubectl --namespace=${PROMETHEUS_NAMESPACE} port-forward service/prometheus 9090
 # open http://localhost:9090/targets and check clickhouse-monitor is exists

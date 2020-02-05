@@ -42,7 +42,7 @@ kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -
 echo "Waiting to start"
 sleep 60
 
-cat https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-dashboard-cr-template.yaml | \
+wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-dashboard-cr-template.yaml | \
 BRANCH="$BRANCH" \
 GRAFANA_DASHBOARD_NAME="$GRAFANA_DASHBOARD_NAME" \
 envsubst | \

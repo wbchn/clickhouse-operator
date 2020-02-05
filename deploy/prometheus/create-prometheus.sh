@@ -41,7 +41,7 @@ kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply -f \
     https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/rbac/prometheus/prometheus-service-account.yaml
 
 # Setup Prometheus instance via prometheus-operator into dedicated namespace
-kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply -f ./prometheus.yaml
+kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply -f ./deploy/prometheus/prometheus.yaml
 
 # Setup "Prometheus - clickhouse-operator" integration.
 # Specify endpoint, where Prometheus can gather data from clickhouse-operator
@@ -51,7 +51,7 @@ kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply -f ./prometheus.yaml
 if kubectl --namespace="${OPERATOR_NAMESPACE}" get service clickhouse-operator-metrics; then
     echo "clickhouse-operator-metrics endpoint found. Configuring integration with clickhouse-operator"
     # clickhouse-operator-metrics service found, can setup integration
-    cat ./prometheus-clickhouse-operator-service-monitor.yaml | \
+    cat ./deploy/prometheus/prometheus-clickhouse-operator-service-monitor.yaml | \
     OPERATOR_NAMESPACE=${OPERATOR_NAMESPACE} sed "s/- kube-system/- ${OPERATOR_NAMESPACE}/" | \
     kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply -f -
 else
