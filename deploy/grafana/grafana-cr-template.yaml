@@ -8,7 +8,7 @@ spec:
   config:
     log:
       mode: "console"
-      level: "warn"
+      level: "info"
     security:
       admin_user: "$GRAFANA_ADMIN_USER"
       admin_password: "$GRAFANA_ADMIN_PASSWORD"
