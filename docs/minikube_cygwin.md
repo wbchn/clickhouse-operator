@@ -17,6 +17,7 @@ choco install -y virtualbox minikube cygwin kubernetes-cli curl git
 ```bash
 minikube addons enable ingress 
 minikube addons enable ingress-dns 
+minikube addons enable metrics-server
 minikube start --memory=4g --disk-size=40g
 ```
 
