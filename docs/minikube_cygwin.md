@@ -15,10 +15,10 @@ choco install -y virtualbox minikube cygwin kubernetes-cli curl git
 ## Open `bash console (as administrator)` press `WIN+R` type `bash` and press `CTRL+SHIFT+ENTER`
 ### Start kubernetes in minikube
 ```bash
+minikube start --memory=4g --disk-size=40g
 minikube addons enable ingress 
 minikube addons enable ingress-dns 
 minikube addons enable metrics-server
-minikube start --memory=4g --disk-size=40g
 ```
 
 ### Check kubectl worked
@@ -45,7 +45,7 @@ export ZK_NAMESPACE=${ZK_NAMESPACE:-zoo1ns}
 git clone https://github.com/Altinity/clickhouse-operator.git ./clickhouse-operator
 cd ./clickhouse-operator
 git checkout ${BRANCH}
-bash -x ./deploy/operator-installer/clickhouse-operator-install.sh
+bash -x ./deploy/operator-web-installer/clickhouse-operator-install.sh
 ```
 
 ### Create Zookeeper installation
@@ -129,6 +129,16 @@ bash -x ./deploy/grafana/install-grafana-with-operator.sh
 
 kubectl --namespace="${GRAFANA_NAMESPACE}" port-forward service/grafana-service 3000
 # open http://localhost:3000/ and check prometheus datasource exists and grafana dashboard exists
+```
+
+## Metrics Exporter
+reboot 
+```bash
+kubectl exec -n $( kubectl get pods --all-namespaces | grep clickhouse-operator | awk '{print $1 " " $2}') -c metrics-exporter reboot
+```
+port-forward
+```bash
+kubectl -n $( kubectl get svc --all-namespaces | grep clickhouse-operator-metrics | awk '{print $1}') port-forward service/clickhouse-operator-metrics 8888
 ```
 
 ## Clear all installed objects
