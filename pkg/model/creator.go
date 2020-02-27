@@ -89,9 +89,9 @@ func (c *Creator) CreateServiceChi() *corev1.Service {
 						TargetPort: intstr.FromString(chDefaultTCPPortName),
 					},
 				},
-				Selector: c.labeler.getSelectorChiScope(),
-				Type:     "LoadBalancer",
-				ExternalTrafficPolicy: "Local",
+				Selector:              c.labeler.getSelectorChiScope(),
+				Type:                  "LoadBalancer",
+				// ExternalTrafficPolicy: "Local",
 			},
 		}
 	}
