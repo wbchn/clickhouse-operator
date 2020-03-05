@@ -4,6 +4,7 @@ echo "External value for \$PROMETHEUS_NAMESPACE=$PROMETHEUS_NAMESPACE"
 echo "External value for \$OPERATOR_NAMESPACE=$OPERATOR_NAMESPACE"
 echo "External value for \$VALIDATE_YAML=$VALIDATE_YAML"
 
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PROMETHEUS_NAMESPACE="${PROMETHEUS_NAMESPACE:-prometheus}"
 OPERATOR_NAMESPACE="${OPERATOR_NAMESPACE:-kube-system}"
 # Possible values for validate yaml are values from --valildate=XXX kubectl option. They are true/false ATM
@@ -50,7 +51,7 @@ kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}
     https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/rbac/prometheus/prometheus-service-account.yaml
 
 # Setup Prometheus instance via prometheus-operator into dedicated namespace
-kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}" -f prometheus.yaml
+kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}" -f ${CURRENT_DIR}/prometheus.yaml
 
 # Setup "Prometheus <-> clickhouse-operator" integration.
 # Specify endpoint, where Prometheus can gather data from clickhouse-operator

@@ -124,8 +124,8 @@ kubectl --namespace=${PROMETHEUS_NAMESPACE} port-forward service/prometheus 9090
 # open http://localhost:9090/targets and check clickhouse-monitor is exists
 
 export GRAFANA_NAMESPACE=${GRAFANA_NAMESPACE:-grafana}
-bash -x ./deploy/grafana/install-grafana-operator.sh
-bash -x ./deploy/grafana/install-grafana-with-operator.sh
+bash -x ./deploy/grafana/grafana-with-grafana-operator/install-grafana-operator.sh
+bash -x ./deploy/grafana/grafana-with-grafana-operator/install-grafana-with-operator.sh
 
 kubectl --namespace="${GRAFANA_NAMESPACE}" port-forward service/grafana-service 3000
 # open http://localhost:3000/ and check prometheus datasource exists and grafana dashboard exists
