@@ -7,7 +7,7 @@ echo "External value for \$VALIDATE_YAML=$VALIDATE_YAML"
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PROMETHEUS_NAMESPACE="${PROMETHEUS_NAMESPACE:-prometheus}"
 OPERATOR_NAMESPACE="${OPERATOR_NAMESPACE:-kube-system}"
-# Possible values for validate yaml are values from --valildate=XXX kubectl option. They are true/false ATM
+# Possible values for "validate yaml" are values from --validate=XXX kubectl option. They are true/false ATM
 VALIDATE_YAML="${VALIDATE_YAML:-true}"
 
 echo "OPTIONS"
