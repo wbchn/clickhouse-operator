@@ -51,7 +51,7 @@ kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}
     https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/rbac/prometheus/prometheus-service-account.yaml
 
 # Setup Prometheus instance via prometheus-operator into dedicated namespace
-kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}" -f ${CURRENT_DIR}/prometheus.yaml
+cat ${CURRENT_DIR}/prometheus.yaml | kubectl --namespace="${PROMETHEUS_NAMESPACE}" apply --validate="${VALIDATE_YAML}" -f -
 
 # Setup "Prometheus <-> clickhouse-operator" integration.
 # Specify endpoint, where Prometheus can gather data from clickhouse-operator

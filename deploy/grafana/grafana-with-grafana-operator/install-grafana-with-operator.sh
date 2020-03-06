@@ -1,4 +1,5 @@
 #!/bin/bash
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 echo "External value for \$GRAFANA_NAMESPACE=$GRAFANA_NAMESPACE"
 echo "External value for \$GRAFANA_NAME=$GRAFANA_NAME"
@@ -48,7 +49,7 @@ echo "Apply options now..."
 ########################################
 
 
-wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-cr-template.yaml | \
+cat ${CURRENT_DIR}/grafana-cr-template.yaml | \
 GRAFANA_NAME="$GRAFANA_NAME" \
 GRAFANA_ADMIN_USER="$GRAFANA_ADMIN_USER" \
 GRAFANA_ADMIN_PASSWORD="$GRAFANA_ADMIN_PASSWORD" \
@@ -60,7 +61,7 @@ kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -
 echo "Waiting to start"
 sleep 60
 
-wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-data-source-cr-template.yaml | \
+cat ${CURRENT_DIR}/grafana-data-source-cr-template.yaml | \
 GRAFANA_DATA_SOURCE_NAME="$GRAFANA_DATA_SOURCE_NAME" \
 PROMETHEUS_URL="$PROMETHEUS_URL" \
 envsubst | \
@@ -69,7 +70,7 @@ kubectl apply --namespace="${GRAFANA_NAMESPACE}" -f -
 echo "Waiting to start"
 sleep 60
 
-wget -qO- https://raw.githubusercontent.com/Altinity/clickhouse-operator/${BRANCH}/deploy/grafana/grafana-dashboard-cr-template.yaml | \
+cat ${CURRENT_DIR}/grafana-dashboard-cr-template.yaml | \
 BRANCH="$BRANCH" \
 GRAFANA_DASHBOARD_NAME="$GRAFANA_DASHBOARD_NAME" \
 envsubst | \

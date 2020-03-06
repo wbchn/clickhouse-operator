@@ -15,7 +15,7 @@ choco install -y virtualbox minikube cygwin kubernetes-cli curl git
 ## Open `bash console (as administrator)` press `WIN+R` type `bash` and press `CTRL+SHIFT+ENTER`
 ### Start kubernetes in minikube
 ```bash
-minikube start --memory=4g --disk-size=40g
+minikube start --memory=4g --disk-size=40g --wait=true --wait-timeout=10m --force
 minikube addons enable ingress 
 minikube addons enable ingress-dns 
 minikube addons enable metrics-server
