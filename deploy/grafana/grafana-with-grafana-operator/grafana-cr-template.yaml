@@ -7,11 +7,11 @@ spec:
     enabled: False
   client:
     timeout: 30
-    preferService: true
+    preferService: True
   config:
     log:
       mode: "console"
-      level: "info"
+      level: "warn"
     security:
       admin_user: "$GRAFANA_ADMIN_USER"
       admin_password: "$GRAFANA_ADMIN_PASSWORD"
