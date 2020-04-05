@@ -38,6 +38,7 @@ export OPERATOR_IMAGE=${OPERATOR_IMAGE:-altinity/clickhouse-operator:latest}
 export METRICS_EXPORTER_IMAGE=${METRICS_EXPORTER_IMAGE:-altinity/metrics-exporter:latest}
 export OPERATOR_NAMESPACE=${OPERATOR_NAMESPACE:-clickhouse}
 export ZK_NAMESPACE=${ZK_NAMESPACE:-zoo1ns}
+export VALIDATE_YAML=${VALIDATE_YAML:-true}
 ``` 
 
 ### Install clickhouse operator
