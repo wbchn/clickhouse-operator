@@ -16,8 +16,8 @@ package metrics
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
-	"strings"
 	"time"
 
 	log "github.com/golang/glog"
@@ -237,6 +237,11 @@ func convertMetricName(in string) string {
 		}
 		out = append(out, unicode.ToLower(runes[i]))
 	}*/
+	re := regexp.MustCompile("[^a-zA-Z0-9_:]")
+	in = re.ReplaceAllString(in, "_")
 
-	return strings.Replace(in, ".", "_", -1)
+	re = regexp.MustCompile("^[^a-zA-Z]*")
+	in = re.ReplaceAllString(in, "_")
+
+	return in
 }
